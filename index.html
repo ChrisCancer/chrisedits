@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" href="logo.png">
+
+    <title>𝘾𝙝𝙧𝙞𝙨 𝘾𝙖𝙣𝙘𝙚𝙧</title>
+    <meta name="description" content="A talented video editor">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="𝘾𝙝𝙧𝙞𝙨 𝘾𝙖𝙣𝙘𝙚𝙧">
+    <meta property="og:description" content="">
+    <script type="text/javascript" src="js/dat.gui.min.js"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+	<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5VXFDMBT');</script>
+<!-- End Google Tag Manager -->
+    <style>
+        * {
+            user-select: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            background-color: #375f9c;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: sans-serif;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            position: relative;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .portfolio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 0vh;
+			margin-top: 0; 
+			z-index: 2;
+        }
+
+        .portfolio-text {
+            font-size: 3em;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .portfolio-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container,
+        .additional-videos-container {
+            display: flex;
+            gap: 20px;
+            z-index: 2;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .additional-videos-container:last-child {
+            margin-bottom: 100px;
+        }
+
+        .video-placeholder {
+            width: 300px;
+            height: 200px;
+            background-color: #222;
+            border: 1px solid #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            color: #888;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out, transform 0.3s ease-in-out, scale 0.3s ease-in-out, z-index 0s 0.3s;
+            z-index: 0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+			border-radius: 15px;
+			  overflow: hidden
+        }
+
+        .video-placeholder video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .video-placeholder .video-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            text-align: center;
+            z-index: 2;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .video-placeholder:hover .video-title {
+            transform: translateY(0);
+        }
+
+        .video-placeholder.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-placeholder.hovered {
+            scale: 1.5;
+            z-index: 10;
+            transition-delay: 0s;
+        }
+
+        .dg {
+            opacity: 0.9;
+            z-index: 3;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+        }
+
+        .dg .property-name {
+            overflow: visible;
+        }
+
+        .bigFont {
+            font-size: 150%;
+            color: #8C8C8C;
+        }
+
+        .cr.function.appBigFont {
+            font-size: 150%;
+            line-height: 27px;
+            color: #A5F8D3;
+            background-color: #023C40;
+        }
+
+        .cr.function.appBigFont .property-name {
+            float: none;
+        }
+
+        .cr.function.appBigFont .icon {
+            position: sticky;
+            bottom: 27px;
+        }
+
+        .icon {
+            font-family: 'iconfont';
+            font-size: 130%;
+            float: right;
+        }
+
+        .twitter:before {
+            content: 'a';
+        }
+
+        .github:before {
+            content: 'b';
+        }
+
+        .app:before {
+            content: 'c';
+        }
+
+        .discord:before {
+            content: 'd';
+        }
+		.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 15px 0;
+    z-index: 2;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.footer a:hover {
+    color: #1DA1F2; 
+}
+.overlay-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10; 
+    color: white;
+    font-size: 14px;
+    pointer-events: none; 
+}
+
+.overlay-footer a {
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    pointer-events: auto;
+}
+
+.overlay-footer a:hover {
+    color: #1DA1F2;
+}
+
+.overlay-footer img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+.contact-section {
+    text-align: center;
+    padding: 50px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+}
+
+.contact-title {
+    font-size: 3rem;
+    font-weight: 400;
+    margin-bottom: -10px;
+    font-family: 'Roboto', sans-serif;
+background: linear-gradient(90deg, #f8f9fa, #adb5bd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.contact-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.contact-link:hover {
+    color: #1DA1F2;
+    transform: translateY(-3px);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+.twitter-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #f8f9fa, #adb5bd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    transition: all 0.3s;
+    margin-top: -15px; /* Ujemny margines przesunie element wyżej */
+    margin-bottom: 10px; /* Dodatkowe dostosowanie odstępu */
+}
+
+.twitter-link:hover {
+    background: transparent;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    color: #333; 
+}
+.twitter-link:hover::after {
+    opacity: 1; /* Pokazujemy tło podczas hover */
+}
+
+.twitter-link img {
+    width: 20px;
+    height: 20px;
+    filter: grayscale(100%) brightness(70%);
+    transition: filter 0.3s;
+}
+
+.twitter-link:hover img {
+    filter: grayscale(0%) brightness(100%);
+}
+        .contact-content {
+            margin-top: 0px; 
+        }
+
+       .sliding-videos-container {
+            position: relative;
+            width: 100%;
+            height: 400px; 
+            margin: 100px 0;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sliding-video {
+            position: absolute;
+            width: 500px; 
+            height: 300px; 
+            background-color: #222;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            z-index: 1;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .sliding-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sliding-video.active {
+            opacity: 1;
+            z-index: 3;
+            transform: translateX(0) scale(1.05);
+        }
+
+        .sliding-video.next {
+            opacity: 0.7;
+            transform: translateX(60%) scale(0.9);
+            z-index: 2;
+        }
+
+        .sliding-video.prev {
+            opacity: 0.7;
+            transform: translateX(-60%) scale(0.9);
+            z-index: 2;
+        }
+
+        .sliding-video.far-next {
+            opacity: 0.3;
+            transform: translateX(120%) scale(0.8);
+            z-index: 1;
+        }
+
+        .sliding-video.far-prev {
+            opacity: 0.3;
+            transform: translateX(-120%) scale(0.8);
+            z-index: 1;
+        }
+
+        .sliding-video.hidden {
+            opacity: 0;
+            z-index: 0;
+        }
+		.sliding-video iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 15px;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  background-color: rgb(16, 16, 16);
+}
+
+button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 4rem;
+  width: 10rem;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 1px 1px 5px black;
+  background-color: white;
+}
+
+.sliding-video {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+.runaway-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.runaway-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+@keyframes runAway {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(50px, -30px); }
+    50% { transform: translate(100px, 20px); }
+    75% { transform: translate(50px, 70px); }
+    100% { transform: translate(0, 100px); }
+}
+
+.runaway-animation {
+    animation: runAway 0.8s forwards;
+}
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+			  pointer-events: none;
+			  background-color: transparent;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+		    .custom-cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+    }
+
+    .custom-cursor.active {
+        transform: translate(-50%, -50%) scale(0.7);
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .custom-cursor.hovered {
+        transform: translate(-50%, -50%) scale(1.5);
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+</style>
+</head>
+
+<body>
+<button class="runaway-btn" id="runawayBtn">My Rates</button>
+
+<div class="overlay-footer">
+    <div style="margin-bottom: 8px;">
+    </div>
+    <div>© 2025 𝘾𝙝𝙧𝙞𝙨 𝘾𝙖𝙣𝙘𝙚𝙧</div>
+</div>
+    <a href="https://x.com/cancer_editor" class="contact-section" target="_blank">
+<div class="contact-section">
+    <img src="https://pbs.twimg.com/profile_images/1860999554033647616/69HFE_bu_400x400.jpg" alt="Avatar" class="avatar">
+    <a href="https://x.com/cancer_editor" class="contact-title" target="_blank">
+	<div  class="contact-title">Hire me!</div>
+  <div class="contact-footer">
+    <div class="contact-content">
+        <a href="https://x.com/cancer_editor" class="twitter-link" target="_blank">
+            <img src="https://abs.twimg.com/favicons/twitter.3.ico" alt="X">
+            𝘾𝙝𝙧𝙞𝙨 𝘾𝙖𝙣𝙘𝙚𝙧
+        </a>
+    </div>
+</div>
+</div>
+<div class="custom-cursor" id="customCursor"></div>
+<div id="particles-js"></div>
+    <div class="portfolio-container">
+        <div class="portfolio-text"></div>
+        <div class="video-container">
+            <div class="video-placeholder" data-delay="0.2">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/d324a4b7-b413-403d-ae98-9a09e602fa0c.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="0.4">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/33a5f318-11ba-4495-8265-dd3dff9ce6f8.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="0.6">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/dfb57077-3c40-4f96-bd34-79a1a09a89f0.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="0.6">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/b9c73343-c4ac-490c-a92a-78efcb6333ef.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="0.6">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/9adc6fcd-e677-4612-aec3-2dab3e717161.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+        </div>
+        <div class="additional-videos-container">
+            <div class="video-placeholder" data-delay="0.8">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/42cea9bf-83cd-4b8e-a998-ddaf79c9abfa.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="1.0">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/0896a5ea-fa60-4124-9709-c119b19ede83.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="1.2">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/44ff4e58-8b01-495e-9b2a-4790fe465757.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="1.4">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/b6632e1a-848b-4f5d-94a7-166501231a48.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="1.6">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/72e735db-ba19-4045-9fee-ed956b8b52bc.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+        </div>
+        <div class="additional-videos-container">
+            <div class="video-placeholder" data-delay="1.8">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/cb82c1fa-7d43-43a8-8109-c3e404c5d2fc.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="2.0">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/06aac700-65a1-4302-bd14-3e9f816de5ee.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="2.2">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/26164896-e658-40df-b9e2-2320f334ee00.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="2.4">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/1e0cf486-b44d-467e-bfb4-7343d4a50d41.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="2.6">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/1765ebd5-bcda-44d5-b8be-1687dc4c6d79.mp4" type="video/mp4"><!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+        </div>
+        <div class="additional-videos-container">
+            <div class="video-placeholder" data-delay="2.8">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/329dd83d-4cc9-4bb6-99b5-e0686172aa69.mp4" type="video/mp4"> <!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="3.0">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/52a5476e-a434-4a6b-b3cc-8d824e14d957.mp4" type="video/mp4"> <!-- LINK DO FILMÓW -->
+                </video>
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="3.2">
+                <video loop playsinline>
+                    <source src="https://r2.fakecrime.bio/uploads/9c2dcbf0-89c8-4b5e-8512-bbf476730906.mp4" type="video/mp4"> <!-- LINK DO FILMÓW -->
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="3.4">
+                <video loop playsinline>
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-placeholder" data-delay="3.6">
+                <video loop playsinline>
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+<div class="sliding-videos-container" id="slidingVideosContainer">
+    <div class="sliding-video">
+        <iframe src="https://www.youtube.com/embed/eskT0LKYebE" frameborder="0" allowfullscreen></iframe><!-- LINK DO YOUTUBA -->
+    </div>
+    <div class="sliding-video">
+        <iframe src="https://www.youtube.com/embed/ouhYHvyQjAk" frameborder="0" allowfullscreen></iframe><!-- LINK DO YOUTUBA -->
+    </div>
+    <div class="sliding-video">
+        <iframe src="https://www.youtube.com/embed/fBBx65zo-qg" frameborder="0" allowfullscreen></iframe><!-- LINK DO YOUTUBA -->
+    </div>
+    <div class="sliding-video">
+        <iframe src="https://www.youtube.com/embed/gznapoX6Mxg" frameborder="0" allowfullscreen></iframe> <!-- LINK DO YOUTUBA -->
+    </div>
+    <div class="sliding-video">
+        <iframe src="https://www.youtube.com/embed/kKObkOMfg1Y" frameborder="0" allowfullscreen></iframe> <!-- LINK DO YOUTUBA -->
+    </div>
+</div>
+<script>
+ 
+    const runawayBtn = document.getElementById('runawayBtn');
+    
+    runawayBtn.addEventListener('mouseover', function() {
+    
+        const maxX = window.innerWidth - this.offsetWidth;
+        const maxY = window.innerHeight - this.offsetHeight;
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+        
+       
+        this.style.transition = 'all 0.5s ease-out';
+        this.style.left = `${randomX}px`;
+        this.style.top = `${randomY}px`;
+    });
+    
+    runawayBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+      
+        this.classList.add('runaway-animation');
+        
+       
+        setTimeout(() => {
+            this.classList.remove('runaway-animation');
+            this.style.transition = 'none';
+            this.style.left = '';
+            this.style.top = '';
+            this.style.right = '20px';
+            this.style.top = '20px';
+        }, 800);
+    });
+
+    const portfolioText = document.querySelector('.portfolio-text');
+    const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+    let isScrolling = false;
+    let lastScrollTime = 0;
+    const scrollDelay = 100;
+
+    function smoothScroll() {
+        const currentTime = Date.now();
+        if (currentTime - lastScrollTime < scrollDelay) return;
+        lastScrollTime = currentTime;
+        
+        checkVisibility();
+        requestAnimationFrame(smoothScroll);
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!isScrolling) {
+            isScrolling = true;
+            smoothScroll();
+        }
+    });
+
+    function checkVisibility() {
+        const windowHeight = window.innerHeight;
+        const scrollY = window.scrollY || window.pageYOffset;
+        
+        
+        const portfolioTextRect = portfolioText.getBoundingClientRect();
+        if (portfolioTextRect.top < windowHeight * 0.8) {
+            portfolioText.classList.add('visible');
+        }
+
+       
+        videoPlaceholders.forEach(placeholder => {
+           
+            if (placeholder.classList.contains('visible')) return;
+            
+            const rect = placeholder.getBoundingClientRect();
+            const isVisible = (rect.top < windowHeight * 0.8) && (rect.bottom > 0);
+            const video = placeholder.querySelector('video');
+            const delay = parseFloat(placeholder.dataset.delay) || 0;
+
+            if (isVisible) {
+                setTimeout(() => {
+                    placeholder.classList.add('visible');
+                    if (video) {
+                        video.play().catch(e => console.log("Autoplay prevented:", e));
+                    }
+                }, delay * 1000);
+            }
+        });
+
+        isScrolling = false;
+    }
+
+    
+    window.addEventListener('load', () => {
+        checkVisibility();
+    });
+
+    videoPlaceholders.forEach(placeholder => {
+        placeholder.addEventListener('mouseenter', () => {
+            placeholder.classList.add('hovered');
+            const video = placeholder.querySelector('video');
+            if (video) {
+                video.muted = false; 
+                video.currentTime = 0; 
+                video.play().catch(e => console.log("Play on hover prevented:", e));
+            }
+        });
+        
+        placeholder.addEventListener('mouseleave', () => {
+            placeholder.classList.remove('hovered');
+            const video = placeholder.querySelector('video');
+            if (video) {
+                video.muted = true; 
+            }
+        });
+        
+        placeholder.addEventListener('click', (e) => {
+            e.preventDefault();
+            const video = placeholder.querySelector('video');
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+    });
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const placeholder = entry.target;
+               
+                if (placeholder.classList.contains('visible')) return;
+                
+                const video = placeholder.querySelector('video');
+                const delay = parseFloat(placeholder.dataset.delay) || 0;
+
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        placeholder.classList.add('visible');
+                        if (video) {
+                            video.muted = true; 
+                            video.play().catch(e => console.log("Autoplay prevented:", e));
+                        }
+                    }, delay * 1000);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        });
+
+        videoPlaceholders.forEach(placeholder => {
+            observer.observe(placeholder);
+        });
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('slidingVideosContainer');
+    const videos = Array.from(container.querySelectorAll('.sliding-video'));
+    const totalVideos = videos.length;
+    let currentIndex = 0;
+    let isAnimating = false;
+    
+   
+    function initSlider() {
+        updatePositions();
+        
+        
+        startAutoplay();
+        
+        
+        videos.forEach(video => {
+            const videoEl = video.querySelector('video');
+            if (videoEl) {
+                videoEl.play().catch(e => console.log("Autoplay prevented:", e));
+            }
+        });
+    }
+    
+    
+    function updatePositions() {
+        videos.forEach((video, index) => {
+            
+            video.className = 'sliding-video';
+            
+            
+            const position = (index - currentIndex + totalVideos) % totalVideos;
+            
+            
+            if (position === 0) {
+                video.classList.add('active');
+            } else if (position === 1) {
+                video.classList.add('next');
+            } else if (position === 2) {
+                video.classList.add('far-next');
+            } else if (position === totalVideos - 1) {
+                video.classList.add('prev');
+            } else if (position === totalVideos - 2) {
+                video.classList.add('far-prev');
+            } else {
+                video.classList.add('hidden');
+            }
+        });
+    }
+    
+    
+    function nextVideo() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentIndex = (currentIndex + 1) % totalVideos;
+        updatePositions();
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, 800);
+    }
+    
+   
+    function startAutoplay() {
+        setInterval(() => {
+            if (!container.matches(':hover')) {
+                nextVideo();
+            }
+        }, 3000);
+    }
+    
+    
+    initSlider();
+});
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        video.volume = 0.2; //głośność
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const settings = {
+        particles: true,   //włącznik partikli
+        runawayButton: true,  
+        videoSlider: true     
+    };
+
+
+    if (settings.particles) {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#375f9c",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "window", 
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": false,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+
+
+    if (settings.runawayButton) {
+        const runawayBtn = document.getElementById('runawayBtn');
+        
+        if (runawayBtn) {
+            runawayBtn.addEventListener('mouseover', function() {
+                const maxX = window.innerWidth - this.offsetWidth;
+                const maxY = window.innerHeight - this.offsetHeight;
+                const randomX = Math.floor(Math.random() * maxX);
+                const randomY = Math.floor(Math.random() * maxY);
+                
+                this.style.transition = 'all 0.5s ease-out';
+                this.style.left = `${randomX}px`;
+                this.style.top = `${randomY}px`;
+            });
+            
+            runawayBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.classList.add('runaway-animation');
+                
+                setTimeout(() => {
+                    this.classList.remove('runaway-animation');
+                    this.style.transition = 'none';
+                    this.style.left = '';
+                    this.style.top = '';
+                    this.style.right = '20px';
+                    this.style.top = '20px';
+                }, 800);
+            });
+        }
+    }
+
+
+    if (settings.videoSlider) {
+        function handleSliderScroll() {
+            const container = document.getElementById('slidingVideosContainer');
+            if (!container) return;
+
+            const videos = Array.from(container.querySelectorAll('.sliding-video'));
+            const totalVideos = videos.length;
+            let currentIndex = 0;
+            let isAnimating = false;
+            
+            function updatePositions() {
+                videos.forEach((video, index) => {
+                    video.className = 'sliding-video';
+                    
+                    const position = (index - currentIndex + totalVideos) % totalVideos;
+                    
+                    if (position === 0) {
+                        video.classList.add('active');
+                    } else if (position === 1) {
+                        video.classList.add('next');
+                    } else if (position === 2) {
+                        video.classList.add('far-next');
+                    } else if (position === totalVideos - 1) {
+                        video.classList.add('prev');
+                    } else if (position === totalVideos - 2) {
+                        video.classList.add('far-prev');
+                    } else {
+                        video.classList.add('hidden');
+                    }
+                });
+            }
+            
+            function nextVideo() {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                currentIndex = (currentIndex + 1) % totalVideos;
+                updatePositions();
+                
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 800);
+            }
+            
+            function prevVideo() {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                currentIndex = (currentIndex - 1 + totalVideos) % totalVideos;
+                updatePositions();
+                
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 800);
+            }
+            
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            container.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            container.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    nextVideo();
+                }
+                if (touchEndX > touchStartX + 50) {
+                    prevVideo();
+                }
+            }
+            
+            updatePositions();
+        }
+
+        handleSliderScroll();
+    }
+});
+</script>
+<script>
+    const cursor = document.getElementById('customCursor');      
+    document.body.style.cursor = 'none';    
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+    
+
+    document.addEventListener('mousedown', () => {
+        cursor.classList.add('active');
+    });
+    
+    document.addEventListener('mouseup', () => {
+        cursor.classList.remove('active');
+    });
+    
+
+    const interactiveElements = document.querySelectorAll('a, button, .video-placeholder, .sliding-video, .runaway-btn');
+    
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hovered');
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hovered');
+        });
+    });
+</script>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5VXFDMBT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+</body>
+</html>
+
+<!--
+ * Copyright (c) 2025 [Chris Cancer]
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Author: [Doniix]
+ * Version: 1.0
+ * X: https://x.com/cancer_editor
+ * X: https://x.com/Doniix_editor
+-->
